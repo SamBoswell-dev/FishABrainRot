@@ -10,12 +10,14 @@ Networker.REMOTES = {
 Networker.RPCFolder = nil
 Networker._events = {}
 
-function Networker.OnLoad()
-	Networker.Init()
-	print("Networker Started!")
-end
+local initialized = false
 
 function Networker.Init()
+	if initialized then
+		return
+	end
+	initialized = true
+
 	local RunService = game:GetService("RunService")
 
 	if RunService:IsServer() then
@@ -81,5 +83,7 @@ function Networker.OnServerEvent(eventName: string, callback: (Player, ...any) -
 
 	return event.OnServerEvent:Connect(callback)
 end
+
+Networker.Init()
 
 return Networker

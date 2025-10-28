@@ -36,6 +36,3 @@
 -- for _, v in pairs(char:GetChildren()) do
 -- 	antiTrans(v) -- adds all parts
 -- end
-
-local Loader = require(game:GetService("ReplicatedStorage").Shared.Loader)
-Loader.LoadAll()
