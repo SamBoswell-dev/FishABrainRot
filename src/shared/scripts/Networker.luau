@@ -11,6 +11,11 @@ Networker.REMOTES = {
 Networker.RPCFolder = nil
 Networker._events = {}
 
+function Networker.OnLoad()
+	Networker:Init()
+	print("Networker Started!")
+end
+
 function Networker:Init()
 	local RunService = game:GetService("RunService")
 
