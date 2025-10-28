@@ -15,18 +15,18 @@ function Loader.LoadAll()
 
 	for _, module in ipairs(clientOrServerScripts) do
 		if module:IsA("ModuleScript") then
-			require(module)
-			if module["OnLoad"] then
-				module.OnLoad()
+			local mod = require(module)
+			if mod["OnLoad"] then
+				mod.OnLoad()
 			end
 		end
 	end
 
 	for _, module in ipairs(sharedScripts) do
 		if module:IsA("ModuleScript") then
-			require(module)
-			if module["OnLoad"] then
-				module.OnLoad()
+			local mod = require(module)
+			if mod["OnLoad"] then
+				mod.OnLoad()
 			end
 		end
 	end

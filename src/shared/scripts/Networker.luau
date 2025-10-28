@@ -1,4 +1,3 @@
---!strict
 local Networker = {}
 Networker.__index = Networker
 
@@ -12,37 +11,37 @@ Networker.RPCFolder = nil
 Networker._events = {}
 
 function Networker.OnLoad()
-	Networker:Init()
+	Networker.Init()
 	print("Networker Started!")
 end
 
-function Networker:Init()
+function Networker.Init()
 	local RunService = game:GetService("RunService")
 
 	if RunService:IsServer() then
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-		self.RPCFolder = ReplicatedStorage:FindFirstChild("RemoteEvents") or Instance.new("Folder")
-		self.RPCFolder.Name = "RemoteEvents"
-		self.RPCFolder.Parent = game:GetService("ReplicatedStorage")
+		Networker.RPCFolder = ReplicatedStorage:FindFirstChild("RemoteEvents") or Instance.new("Folder")
+		Networker.RPCFolder.Name = "RemoteEvents"
+		Networker.RPCFolder.Parent = game:GetService("ReplicatedStorage")
 
 		for _, eventName in pairs(Networker.REMOTES) do
 			local RPC: RemoteEvent = Instance.new("RemoteEvent")
 			RPC.Name = eventName
-			RPC.Parent = self.RPCFolder
-			self._events[eventName] = RPC
+			RPC.Parent = Networker.RPCFolder
+			Networker._events[eventName] = RPC
 		end
 	else
 		local RPCs = game:GetService("ReplicatedStorage").RemoteEvents:GetChildren()
 		for _i, RPC in ipairs(RPCs) do
-			self._events[RPC.Name] = RPC
+			Networker._events[RPC.Name] = RPC
 		end
 	end
 	print("Networker Init")
 end
 
-function Networker:FireServer(eventName: string, ...: any)
-	local event: RemoteEvent = self._events[eventName]
+function Networker.FireServer(eventName: string, ...: any)
+	local event: RemoteEvent = Networker._events[eventName]
 
 	if not event then
 		error(`{eventName} is not a registered event.`)
@@ -52,8 +51,8 @@ function Networker:FireServer(eventName: string, ...: any)
 	event:FireServer(...)
 end
 
-function Networker:FireClient(eventName: string, player: Player, ...: any)
-	local event: RemoteEvent = self._events[eventName]
+function Networker.FireClient(eventName: string, player: Player, ...: any)
+	local event: RemoteEvent = Networker._events[eventName]
 
 	if not event then
 		error(`{eventName} is not a registered event.`)
@@ -63,8 +62,8 @@ function Networker:FireClient(eventName: string, player: Player, ...: any)
 	event:FireClient(player, ...)
 end
 
-function Networker:OnClientEvent(eventName: string, callback: (...any) -> ()): RBXScriptConnection
-	local event: RemoteEvent = self._events[eventName]
+function Networker.OnClientEvent(eventName: string, callback: (...any) -> ()): RBXScriptConnection
+	local event: RemoteEvent = Networker._events[eventName]
 
 	if not event then
 		error(`{eventName} is not a registered event.`)
@@ -73,8 +72,8 @@ function Networker:OnClientEvent(eventName: string, callback: (...any) -> ()): R
 	return event.OnClientEvent:Connect(callback)
 end
 
-function Networker:OnServerEvent(eventName: string, callback: (Player, ...any) -> ()): RBXScriptConnection
-	local event: RemoteEvent = self._events[eventName]
+function Networker.OnServerEvent(eventName: string, callback: (Player, ...any) -> ()): RBXScriptConnection
+	local event: RemoteEvent = Networker._events[eventName]
 
 	if not event then
 		error(`{eventName} is not a registered event.`)
