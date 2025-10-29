@@ -52,10 +52,13 @@ function CameraController._CreateFPLegs()
 	end
 
 	RunService.RenderStepped:Connect(function()
-		--local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+		local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 		for original, clone in pairs(clones) do
-			--local relative = root.CFrame:ToObjectSpace(original.CFrame)
-			clone.CFrame = original.CFrame
+			local rootForward = root.CFrame.LookVector
+			local newPos = original.Position + rootForward * -2
+			local newCFrame = CFrame.new(newPos)
+				* CFrame.fromMatrix(Vector3.zero, original.CFrame.RightVector, original.CFrame.UpVector)
+			clone.CFrame = newCFrame
 		end
 	end)
 end
@@ -63,3 +66,13 @@ end
 CameraController.Init()
 
 return CameraController
+
+-- local worldOffset = Vector3.new(0, 0, -3) -- world Z offset
+-- local targetPosition = original.Position + worldOffset
+
+-- -- Get the player's rotation around Y only
+-- local _, yRotation, _ = original.CFrame:ToEulerAnglesYXZ()
+-- local rotation = CFrame.Angles(0, yRotation, 0) -- only Y rotation
+
+-- -- Set the clone CFrame
+-- clone.CFrame = CFrame.new(targetPosition) * rotation

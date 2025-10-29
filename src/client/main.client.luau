@@ -1,2 +1,2 @@
 local StarterPlayer = game:GetService("StarterPlayer")
-local CameraController = require(StarterPlayer.StarterPlayerScripts.Client.Controllers.CameraController)
+local _CameraController = require(StarterPlayer.StarterPlayerScripts.Client.Controllers.CameraController)
