@@ -13,12 +13,12 @@ function LegsManager.Init(offset: number)
 	bodyParts.RightFoot = player:FindFirstChild("RightFoot")
 
 	local bodyPartRefs = {}
-	bodyPartRefs.LeftUpperLeg = game:GetService("ReplicatedStorage").Meshs.ClientLeftUpperLeg
-	bodyPartRefs.LeftLowerLeg = game:GetService("ReplicatedStorage").Meshs.ClientLeftLowerLeg
-	bodyPartRefs.LeftFoot = game:GetService("ReplicatedStorage").Meshs.ClientLeftFoot
-	bodyPartRefs.RightUpperLeg = game:GetService("ReplicatedStorage").Meshs.ClientRightUpperLeg
-	bodyPartRefs.RightLowerLeg = game:GetService("ReplicatedStorage").Meshs.ClientRightLowerLeg
-	bodyPartRefs.RightFoot = game:GetService("ReplicatedStorage").Meshs.ClientRightFoot
+	bodyPartRefs.LeftUpperLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperLeg
+	bodyPartRefs.LeftLowerLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftLowerLeg
+	bodyPartRefs.LeftFoot = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftFoot
+	bodyPartRefs.RightUpperLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightUpperLeg
+	bodyPartRefs.RightLowerLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightLowerLeg
+	bodyPartRefs.RightFoot = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightFoot
 
 	local clones = {}
 
