@@ -11,6 +11,12 @@ function LegsManager.Init(offset: number)
 	bodyParts.RightUpperLeg = player:FindFirstChild("RightUpperLeg")
 	bodyParts.RightLowerLeg = player:FindFirstChild("RightLowerLeg")
 	bodyParts.RightFoot = player:FindFirstChild("RightFoot")
+	bodyParts.RightUpperArm = player:FindFirstChild("RightUpperArm")
+	bodyParts.RightLowerArm = player:FindFirstChild("RightLowerArm")
+	bodyParts.RightHand = player:FindFirstChild("RightHand")
+	bodyParts.LeftUpperArm = player:FindFirstChild("LeftUpperArm")
+	bodyParts.LeftLowerArm = player:FindFirstChild("LeftLowerArm")
+	bodyParts.LeftArm = player:FindFirstChild("LeftArm")
 
 	local bodyPartRefs = {}
 	bodyPartRefs.LeftUpperLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperLeg
@@ -19,6 +25,12 @@ function LegsManager.Init(offset: number)
 	bodyPartRefs.RightUpperLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightUpperLeg
 	bodyPartRefs.RightLowerLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightLowerLeg
 	bodyPartRefs.RightFoot = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightFoot
+	bodyPartRefs.RightUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightUpperArm
+	bodyPartRefs.RightLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightLowerArm
+	bodyPartRefs.RightHand = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightHand
+	bodyPartRefs.LeftUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperArm
+	bodyPartRefs.LeftLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftLowerArm
+	bodyPartRefs.LeftArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftHand
 
 	local clones = {}
 
@@ -44,6 +56,42 @@ function LegsManager.Init(offset: number)
 			clone.CFrame = newCFrame
 		end
 	end)
+
+	-- local armParts = {}
+	-- armParts.RightUpperArm = player:FindFirstChild("RightUpperArm")
+	-- armParts.RightLowerArm = player:FindFirstChild("RightLowerArm")
+	-- armParts.RightHand = player:FindFirstChild("RightHand")
+	-- armParts.LeftUpperArm = player:FindFirstChild("LeftUpperArm")
+	-- armParts.LeftLowerArm = player:FindFirstChild("LeftLowerArm")
+	-- armParts.LeftArm = player:FindFirstChild("LeftArm")
+
+	-- local armPartRefs = {}
+	-- armPartRefs.RightUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightUpperArm
+	-- armPartRefs.RightLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightLowerArm
+	-- armPartRefs.RightHand = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightHand
+	-- armPartRefs.LeftUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperArm
+	-- armPartRefs.LeftLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftLowerArm
+	-- armPartRefs.LeftArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftArm
+
+	-- local armClones = {}
+
+	-- for key, part in pairs(armParts) do
+	-- 	local clone = legPartRefs[key]:Clone()
+	-- 	if not workspace:FindFirstChild("LocalParts") then
+	-- 		local folder = Instance.new("Folder")
+	-- 		folder.Name = "LocalParts"
+	-- 		folder.Parent = workspace
+	-- 	end
+	-- 	clone.Parent = workspace.LocalParts
+	-- 	clone.CFrame = part.CFrame
+	-- 	armClones[part] = clone
+	-- end
+
+	-- RunService.RenderStepped:Connect(function()
+	-- 	for key, value in pairs(armParts) do
+	-- 		value.LocalTransparencyModifier = 0
+	-- 	end
+	-- end)
 end
 
 return LegsManager
