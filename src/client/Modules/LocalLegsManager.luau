@@ -17,6 +17,7 @@ function LegsManager.Init(offset: number)
 	bodyParts.LeftUpperArm = player:FindFirstChild("LeftUpperArm")
 	bodyParts.LeftLowerArm = player:FindFirstChild("LeftLowerArm")
 	bodyParts.LeftArm = player:FindFirstChild("LeftArm")
+	bodyParts.FishingRod = player:FindFirstChild("FishingRod")
 
 	local bodyPartRefs = {}
 	bodyPartRefs.LeftUpperLeg = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperLeg
@@ -31,6 +32,7 @@ function LegsManager.Init(offset: number)
 	bodyPartRefs.LeftUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperArm
 	bodyPartRefs.LeftLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftLowerArm
 	bodyPartRefs.LeftArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftHand
+	bodyPartRefs.FishingRod = game:GetService("ReplicatedStorage").Meshs.FishingRods.ClientFishingRod
 
 	local clones = {}
 

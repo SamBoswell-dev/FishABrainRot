@@ -22,12 +22,15 @@ end
 -- Action Events ----------------------
 
 function FishingController._OnToggleRod(actionName, inputState, inputObject)
+	local clientFishingRod = game.Workspace.LocalParts.ClientFishingRod
+
 	if inputState == Enum.UserInputState.Begin then
 		if FishingController.IsHoldingRod then
 			FishingController.IsHoldingRod = false
 
 			-- Make rod invisible
 			Player.Character.FishingRod.Transparency = 1
+			clientFishingRod.Transparency = 1
 
 			-- Reset animation
 
@@ -37,6 +40,7 @@ function FishingController._OnToggleRod(actionName, inputState, inputObject)
 
 			-- Make rod visible
 			Player.Character.FishingRod.Transparency = 0
+			clientFishingRod.Transparency = 0
 
 			-- Animate to holding position
 
