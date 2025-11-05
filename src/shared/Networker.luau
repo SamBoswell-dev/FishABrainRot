@@ -5,6 +5,7 @@ Networker.__index = Networker
 Networker.REMOTES = {
 	SAY_HELLO = "SayHello",
 	SAY_GOODBYE = "SayGoodbye",
+	ANIMATE_ROD_EQUIP = "AnimateRodEquip",
 }
 
 Networker.RPCFolder = nil

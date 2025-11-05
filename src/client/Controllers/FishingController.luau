@@ -1,7 +1,13 @@
+local Networker = require(game:GetService("ReplicatedStorage").Shared.Networker)
 local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Player = game.Players.LocalPlayer
+local AnimationController = require(script.Parent.PlayerAnimationController)
+local ClientPlayer: Player = game.Players.LocalPlayer
+local ClientCharacter = ClientPlayer.Character or ClientPlayer.CharacterAdded:Wait()
+local ClientHumanoid: Humanoid = ClientCharacter:FindFirstChildOfClass("Humanoid")
 local FishingController = {}
+
+FishingController.fishPosAnimTrack = nil
 
 local ACTIONNAMES = {
 	TOGGLEROD = "TOGGLE_ROD",
@@ -22,27 +28,36 @@ end
 -- Action Events ----------------------
 
 function FishingController._OnToggleRod(actionName, inputState, inputObject)
-	local clientFishingRod = game.Workspace.LocalParts.ClientFishingRod
-
 	if inputState == Enum.UserInputState.Begin then
+		local clientFishingRod = game.Workspace.LocalParts.ClientFishingRod
+		if FishingController.fishPosAnimTrack then
+			FishingController.fishPosAnimTrack:Stop()
+		end
+
 		if FishingController.IsHoldingRod then
 			FishingController.IsHoldingRod = false
 
 			-- Make rod invisible
-			Player.Character.FishingRod.Transparency = 1
+			-- TODO: Change shared rods transparency from the server
+			ClientCharacter.FishingRod.Transparency = 1
 			clientFishingRod.Transparency = 1
 
 			-- Reset animation
+			AnimationController.StopAnimation(AnimationController.ANIMATIONS.FishingIdle)
 
 			-- Unbind cast key
 		else
 			FishingController.IsHoldingRod = true
 
 			-- Make rod visible
-			Player.Character.FishingRod.Transparency = 0
+			ClientCharacter.FishingRod.Transparency = 0
 			clientFishingRod.Transparency = 0
 
 			-- Animate to holding position
+			AnimationController.PlayTwoAnimations(
+				AnimationController.ANIMATIONS.FishingPosition,
+				AnimationController.ANIMATIONS.FishingIdle
+			)
 
 			-- Bind cast key
 		end
