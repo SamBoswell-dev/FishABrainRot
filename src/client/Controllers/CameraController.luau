@@ -12,7 +12,7 @@ function CameraController.Init()
 	initialized = true
 
 	-- Offset Legs
-	LocalLegsManager.Init(-2)
+	LocalLegsManager.Init()
 end
 
 function CameraController._CreateFPLegs() end

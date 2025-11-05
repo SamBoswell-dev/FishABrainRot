@@ -1,8 +1,12 @@
 local LegsManager = {}
 
-function LegsManager.Init(offset: number)
+function LegsManager.Init()
 	local player = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+	local CollectionService = game:GetService("CollectionService")
 	local RunService = game:GetService("RunService")
+
+	local LEG_OFFSET = -2
+	local ARM_OFFSET = -1.3
 
 	local bodyParts = {}
 	bodyParts.LeftUpperLeg = player:FindFirstChild("LeftUpperLeg")
@@ -16,7 +20,7 @@ function LegsManager.Init(offset: number)
 	bodyParts.RightHand = player:FindFirstChild("RightHand")
 	bodyParts.LeftUpperArm = player:FindFirstChild("LeftUpperArm")
 	bodyParts.LeftLowerArm = player:FindFirstChild("LeftLowerArm")
-	bodyParts.LeftArm = player:FindFirstChild("LeftArm")
+	bodyParts.LeftHand = player:FindFirstChild("LeftHand")
 	bodyParts.FishingRod = player:FindFirstChild("FishingRod")
 
 	local bodyPartRefs = {}
@@ -31,7 +35,7 @@ function LegsManager.Init(offset: number)
 	bodyPartRefs.RightHand = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientRightHand
 	bodyPartRefs.LeftUpperArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftUpperArm
 	bodyPartRefs.LeftLowerArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftLowerArm
-	bodyPartRefs.LeftArm = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftHand
+	bodyPartRefs.LeftHand = game:GetService("ReplicatedStorage").Meshs.BodyParts.ClientLeftHand
 	bodyPartRefs.FishingRod = game:GetService("ReplicatedStorage").Meshs.FishingRods.ClientFishingRod
 
 	local clones = {}
@@ -52,7 +56,12 @@ function LegsManager.Init(offset: number)
 		local root = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 		for original, clone in pairs(clones) do
 			local rootForward = root.CFrame.LookVector
-			local newPos = original.Position + rootForward * offset
+			local newPos = nil
+			if CollectionService:HasTag(original, "LegPart") then
+				newPos = original.Position + rootForward * LEG_OFFSET
+			else
+				newPos = original.Position + rootForward * ARM_OFFSET
+			end
 			local newCFrame = CFrame.new(newPos)
 				* CFrame.fromMatrix(Vector3.zero, original.CFrame.RightVector, original.CFrame.UpVector)
 			clone.CFrame = newCFrame
