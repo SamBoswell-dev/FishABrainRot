@@ -38,8 +38,7 @@ function FishingController._OnToggleRod(actionName, inputState, inputObject)
 			FishingController.IsHoldingRod = false
 
 			-- Make rod invisible
-			-- TODO: Change shared rods transparency from the server
-			ClientCharacter.FishingRod.Transparency = 1
+			Networker.FireServer(Networker.REMOTES.CHANGE_ROD_TRANSPARENCY, 1)
 			clientFishingRod.Transparency = 1
 
 			-- Reset animation
@@ -50,7 +49,7 @@ function FishingController._OnToggleRod(actionName, inputState, inputObject)
 			FishingController.IsHoldingRod = true
 
 			-- Make rod visible
-			ClientCharacter.FishingRod.Transparency = 0
+			Networker.FireServer(Networker.REMOTES.CHANGE_ROD_TRANSPARENCY, 0)
 			clientFishingRod.Transparency = 0
 
 			-- Animate to holding position
