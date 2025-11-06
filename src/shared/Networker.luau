@@ -6,6 +6,7 @@ Networker.REMOTES = {
 	SAY_HELLO = "SayHello",
 	SAY_GOODBYE = "SayGoodbye",
 	CHANGE_ROD_TRANSPARENCY = "ChangeRodTransparency",
+	ON_FISH_GAME = "OnFishGame",
 }
 
 Networker.RPCFolder = nil
