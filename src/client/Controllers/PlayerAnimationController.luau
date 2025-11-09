@@ -32,4 +32,5 @@ function Controller.StopAnimation(animation: AnimationTrack)
 	animation:Stop()
 end
 
+print("Animation Controller Required")
 return Controller

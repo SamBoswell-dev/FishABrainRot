@@ -19,4 +19,5 @@ function CameraController._CreateFPLegs() end
 
 CameraController.Init()
 
+print("CameraController Required")
 return CameraController

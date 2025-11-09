@@ -68,4 +68,5 @@ function FishingController._BindToggleRod()
 end
 
 FishingController.Init()
+print("FishingController Required")
 return FishingController

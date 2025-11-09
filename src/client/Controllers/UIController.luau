@@ -9,4 +9,5 @@ Networker.OnClientEvent(Networker.REMOTES.ON_FISH_GAME, function(fish)
 	FishingGameUI.StartGame(fish)
 end)
 
+print("UIController Required")
 return UIController
