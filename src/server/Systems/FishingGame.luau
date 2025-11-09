@@ -30,8 +30,8 @@ function FishingGame.SpawnFish(player: Player)
 		pointsToWin = 10,
 		initalPointValue = 5,
 		pointDecreaseRate = 1, -- Per second
-		greenAreaWidth = 100, -- 1 - 100
-		greenAreaSpeed = 5, -- 1 - 10
+		greenAreaWidth = 50, -- 1 - 100
+		greenAreaSpeed = 3, -- 1 - 10
 	}
 
 	-- Randomly select wait time and wait

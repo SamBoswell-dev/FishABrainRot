@@ -5,8 +5,8 @@ local FishingGame = {}
 FishingGame.isPlaying = false
 FishingGame.greenDirection = nil -- -1 or 1
 
-local TICK_SPEED = 0.3
-local SWITCH_DIR_CHANCE = 30 -- max 100
+local TICK_SPEED = 0.02
+local SWITCH_DIR_CHANCE = 10 -- max 200
 
 function FishingGame.StartGame(fish)
 	FishingGameUI.Visible = true
@@ -14,7 +14,7 @@ function FishingGame.StartGame(fish)
 
 	-- Make the Green area match with the fish's value
 	GreenArea.Size = FishingGame._GetGreenAreaSize(fish) -- max .33 min .12
-	FishingGame.greenDireciton = 1
+	FishingGame.greenDirection = 1
 
 	while FishingGame.isPlaying do
 		-- Move the green area
@@ -33,21 +33,23 @@ function FishingGame._GetGreenAreaSize(fish): UDim2
 end
 
 function FishingGame._GetNewGreenAreaPos(fish): UDim2
-	local amount = 0.001 + (fish.greenAreaSpeed - 1) * (0.004 / 9)
+	local amount = 0.005 + (fish.greenAreaSpeed - 1) * (0.01 / 9)
 	local newPos =
 		UDim2.fromScale(GreenArea.Position.X.Scale + amount * FishingGame.greenDirection, GreenArea.Position.Y.Scale)
 
 	-- Determine if we are at the edge
-	if newPos.X.Scale <= 0 or newPos.Y.Scale >= 1 then
+	if newPos.X.Scale <= 0 or newPos.X.Scale >= 1 then
 		FishingGame.greenDirection = FishingGame.greenDirection * -1
 		newPos = UDim2.fromScale(
 			GreenArea.Position.X.Scale + amount * FishingGame.greenDirection,
 			GreenArea.Position.Y.Scale
 		)
 	else
-		local randNum = math.random(1, 100)
+		local randNum = math.random(1, 200)
+		-- print(randNum)
 		if randNum < SWITCH_DIR_CHANCE then
-			FishingGame.greenDireciton = FishingGame.greenDirection * -1
+			FishingGame.greenDirection = FishingGame.greenDirection * -1
+			-- print(FishingGame.greenDirection)
 		end
 
 		newPos = UDim2.fromScale(
