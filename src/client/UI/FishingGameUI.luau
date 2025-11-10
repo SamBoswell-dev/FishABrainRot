@@ -1,3 +1,5 @@
+local StarterPlayer = game:GetService("StarterPlayer")
+local KeyBindManager = require(StarterPlayer.StarterPlayerScripts.Client.Modules.KeyBindManager)
 local FishingGameUI: Frame = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame
 local GreenArea: ImageButton = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.GreenArea
 local PlayerIcon: ImageLabel = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.PlayerIcon
@@ -9,6 +11,8 @@ FishingGame.greenDirection = nil -- -1 or 1
 local TICK_SPEED = 0.02
 local SWITCH_DIR_CHANCE = 10 -- max 200
 
+local GAME_FORGIVE_VALUE = 5
+
 function FishingGame.StartGame(fish)
 	FishingGameUI.Visible = true
 	FishingGame.isPlaying = true
@@ -18,6 +22,7 @@ function FishingGame.StartGame(fish)
 	FishingGame.greenDirection = 1
 
 	-- Turn on fishing controls
+	KeyBindManager.BindFishingMiniGame(FishingGame._OnRightPressed, FishingGame._OnLeftPressed)
 
 	while FishingGame.isPlaying do
 		-- Move the green area
@@ -34,6 +39,42 @@ end
 
 function FishingGame.EndGame() end
 
+local isRightHeld = false
+function FishingGame._OnRightPressed(actionName, inputState, inputObject)
+	if inputState == Enum.UserInputState.Begin then
+		isRightHeld = true
+		task.spawn(function()
+			while isRightHeld do
+				-- move player
+				print("moving right")
+				task.wait(TICK_SPEED)
+			end
+		end)
+	else
+		if inputState == Enum.UserInputState.End then
+			isRightHeld = false
+		end
+	end
+end
+
+local isLeftHeld = false
+function FishingGame._OnLeftPressed(actionName, inputState, inputObject)
+	if inputState == Enum.UserInputState.Begin then
+		isLeftHeld = true
+		task.spawn(function()
+			while isLeftHeld do
+				-- move player
+				print("moving left")
+				task.wait(TICK_SPEED)
+			end
+		end)
+	else
+		if inputState == Enum.UserInputState.End then
+			isLeftHeld = false
+		end
+	end
+end
+
 function FishingGame._IsFishInGreen(): boolean
 	local greenLeftPos = GreenArea.AbsolutePosition.X
 	local greenRightPos = GreenArea.AbsolutePosition.X + GreenArea.AbsoluteSize.X
@@ -42,7 +83,9 @@ function FishingGame._IsFishInGreen(): boolean
 	local playerRightPos = PlayerIcon.AbsolutePosition.X + PlayerIcon.AbsoluteSize.X
 
 	if playerLeftPos >= greenLeftPos and playerRightPos <= greenRightPos then
-		return true
+		GreenArea.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+	else
+		GreenArea.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 	end
 
 	return false
