@@ -1,5 +1,6 @@
 local FishingGameUI: Frame = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame
 local GreenArea: ImageButton = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.GreenArea
+local PlayerIcon: ImageLabel = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.PlayerIcon
 local FishingGame = {}
 
 FishingGame.isPlaying = false
@@ -16,15 +17,36 @@ function FishingGame.StartGame(fish)
 	GreenArea.Size = FishingGame._GetGreenAreaSize(fish) -- max .33 min .12
 	FishingGame.greenDirection = 1
 
+	-- Turn on fishing controls
+
 	while FishingGame.isPlaying do
 		-- Move the green area
 		GreenArea.Position = FishingGame._GetNewGreenAreaPos(fish)
+
+		-- Check if the Player is in the green area
+		if FishingGame._IsFishInGreen() then
+			print("In green")
+		end
 
 		task.wait(TICK_SPEED)
 	end
 end
 
 function FishingGame.EndGame() end
+
+function FishingGame._IsFishInGreen(): boolean
+	local greenLeftPos = GreenArea.AbsolutePosition.X
+	local greenRightPos = GreenArea.AbsolutePosition.X + GreenArea.AbsoluteSize.X
+
+	local playerLeftPos = PlayerIcon.AbsolutePosition.X
+	local playerRightPos = PlayerIcon.AbsolutePosition.X + PlayerIcon.AbsoluteSize.X
+
+	if playerLeftPos >= greenLeftPos and playerRightPos <= greenRightPos then
+		return true
+	end
+
+	return false
+end
 
 function FishingGame._GetGreenAreaSize(fish): UDim2
 	local result = 0.12 + (fish.greenAreaWidth - 1) * (0.21 / 99)
