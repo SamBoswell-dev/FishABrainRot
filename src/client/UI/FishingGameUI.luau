@@ -13,6 +13,8 @@ local SWITCH_DIR_CHANCE = 10 -- max 200
 
 local GAME_FORGIVE_VALUE = 5
 
+local PLAYER_MOVE_SPEED = 0.008
+
 function FishingGame.StartGame(fish)
 	FishingGameUI.Visible = true
 	FishingGame.isPlaying = true
@@ -40,12 +42,19 @@ end
 function FishingGame.EndGame() end
 
 local isRightHeld = false
-function FishingGame._OnRightPressed(actionName, inputState, inputObject)
+function FishingGame._OnRightPressed(_actionName, inputState, _inputObject)
 	if inputState == Enum.UserInputState.Begin then
 		isRightHeld = true
 		task.spawn(function()
 			while isRightHeld do
 				-- move player
+				if
+					PlayerIcon.AbsolutePosition.X + PlayerIcon.AbsoluteSize.X
+					<= FishingGameUI.AbsolutePosition.X + FishingGameUI.AbsoluteSize.X
+				then
+					PlayerIcon.Position =
+						UDim2.fromScale(PlayerIcon.Position.X.Scale + PLAYER_MOVE_SPEED, PlayerIcon.Position.Y.Scale)
+				end
 				print("moving right")
 				task.wait(TICK_SPEED)
 			end
@@ -58,12 +67,16 @@ function FishingGame._OnRightPressed(actionName, inputState, inputObject)
 end
 
 local isLeftHeld = false
-function FishingGame._OnLeftPressed(actionName, inputState, inputObject)
+function FishingGame._OnLeftPressed(_actionName, inputState, _inputObject)
 	if inputState == Enum.UserInputState.Begin then
 		isLeftHeld = true
 		task.spawn(function()
 			while isLeftHeld do
 				-- move player
+				if PlayerIcon.AbsolutePosition.X >= FishingGameUI.AbsolutePosition.X then
+					PlayerIcon.Position =
+						UDim2.fromScale(PlayerIcon.Position.X.Scale - PLAYER_MOVE_SPEED, PlayerIcon.Position.Y.Scale)
+				end
 				print("moving left")
 				task.wait(TICK_SPEED)
 			end
@@ -98,7 +111,7 @@ function FishingGame._GetGreenAreaSize(fish): UDim2
 end
 
 function FishingGame._GetNewGreenAreaPos(fish): UDim2
-	local amount = 0.005 + (fish.greenAreaSpeed - 1) * (0.01 / 9)
+	local amount = 0.005 + (fish.greenAreaSpeed - 1) * (0.002 / 9)
 	local newPos =
 		UDim2.fromScale(GreenArea.Position.X.Scale + amount * FishingGame.greenDirection, GreenArea.Position.Y.Scale)
 
@@ -123,6 +136,8 @@ function FishingGame._GetNewGreenAreaPos(fish): UDim2
 		)
 	end
 
+	-- TODO: Bug with speed. Green area seems to speed up as time passes. Try to check the greenDirection variable
+	print(amount)
 	return newPos
 end
 
