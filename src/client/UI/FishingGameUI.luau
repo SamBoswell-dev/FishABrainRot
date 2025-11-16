@@ -81,7 +81,10 @@ function FishingGame.StartGame(fish)
 
 	FishingGameUI.Visible = false
 
-	-- Retract players bobber
+	-- TODO: Retract players bobber
+
+	-- Release key binds
+	KeyBindManager.UnbindFishingMiniGame()
 end
 
 local isRightHeld = false
