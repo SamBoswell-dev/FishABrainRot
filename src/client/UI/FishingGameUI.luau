@@ -14,7 +14,7 @@ FishingGame.isPlaying = false
 FishingGame.greenDirection = nil -- -1 or 1
 
 local TICK_SPEED = 0.02
-local SWITCH_DIR_CHANCE = 10 -- max 200
+local SWITCH_DIR_CHANCE = 8 -- max 200
 
 local GAME_FORGIVE_VALUE = 5
 
@@ -170,29 +170,26 @@ end
 
 function FishingGame._GetNewGreenAreaPos(fish): UDim2
 	local amount = 0.005 + (fish.greenAreaSpeed - 1) * (0.002 / 9)
-	local newPos =
-		UDim2.fromScale(GreenArea.Position.X.Scale + amount * FishingGame.greenDirection, GreenArea.Position.Y.Scale)
 
 	-- Determine if we are at the edge
-	if newPos.X.Scale <= 0 or newPos.X.Scale >= 1 then
-		FishingGame.greenDirection = FishingGame.greenDirection * -1
-		newPos = UDim2.fromScale(
-			GreenArea.Position.X.Scale + amount * FishingGame.greenDirection,
-			GreenArea.Position.Y.Scale
-		)
+	if GreenArea.AbsolutePosition.X <= FishingGameUI.AbsolutePosition.X then
+		FishingGame.greenDirection = 1
 	else
-		local randNum = math.random(1, 200)
-		-- print(randNum)
-		if randNum < SWITCH_DIR_CHANCE then
-			FishingGame.greenDirection = FishingGame.greenDirection * -1
-			-- print(FishingGame.greenDirection)
+		if
+			GreenArea.AbsolutePosition.X + GreenArea.AbsoluteSize.X
+			>= FishingGameUI.AbsolutePosition.X + FishingGameUI.AbsoluteSize.X
+		then
+			FishingGame.greenDirection = -1
+		else
+			local randNum = math.random(1, 200)
+			if randNum < SWITCH_DIR_CHANCE then
+				FishingGame.greenDirection = FishingGame.greenDirection * -1
+			end
 		end
-
-		newPos = UDim2.fromScale(
-			GreenArea.Position.X.Scale + amount * FishingGame.greenDirection,
-			GreenArea.Position.Y.Scale
-		)
 	end
+
+	local newPos =
+		UDim2.fromScale(GreenArea.Position.X.Scale + amount * FishingGame.greenDirection, GreenArea.Position.Y.Scale)
 
 	-- TODO: Bug with speed. Green area seems to speed up as time passes. Try to check the greenDirection variable
 	return newPos
