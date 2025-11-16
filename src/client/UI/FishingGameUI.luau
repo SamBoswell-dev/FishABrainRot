@@ -1,8 +1,13 @@
 local StarterPlayer = game:GetService("StarterPlayer")
+local TimerService = game:GetService("TimerService")
 local KeyBindManager = require(StarterPlayer.StarterPlayerScripts.Client.Modules.KeyBindManager)
 local FishingGameUI: Frame = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame
-local GreenArea: ImageButton = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.GreenArea
+local GreenArea: ImageLabel = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.GreenArea
 local PlayerIcon: ImageLabel = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.PlayerIcon
+
+-- TEMP
+local TestText: TextBox = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.TestText
+
 local FishingGame = {}
 
 FishingGame.isPlaying = false
@@ -15,6 +20,8 @@ local GAME_FORGIVE_VALUE = 5
 
 local PLAYER_MOVE_SPEED = 0.008
 
+local POINT_TIME_MAX = 0.5 -- How often the points will get calculated (lower is faster)
+
 function FishingGame.StartGame(fish)
 	FishingGameUI.Visible = true
 	FishingGame.isPlaying = true
@@ -26,20 +33,56 @@ function FishingGame.StartGame(fish)
 	-- Turn on fishing controls
 	KeyBindManager.BindFishingMiniGame(FishingGame._OnRightPressed, FishingGame._OnLeftPressed)
 
+	local points = fish.initalPointValue
+	local winLimit = fish.pointsToWin
+	local timeElapsed = 0
+
 	while FishingGame.isPlaying do
+		local timeStart = os.time()
+
 		-- Move the green area
 		GreenArea.Position = FishingGame._GetNewGreenAreaPos(fish)
+		FishingGame._HandleColor()
 
-		-- Check if the Player is in the green area
-		if FishingGame._IsFishInGreen() then
-			print("In green")
+		-- Check if the Player is in the green area and give points
+		if timeElapsed >= POINT_TIME_MAX then
+			if FishingGame._IsFishInGreen() then
+				-- Give points
+				points += 1
+			else
+				-- Take points
+				points -= 1
+			end
+			timeElapsed = 0
 		end
 
+		-- Check for win or loss condition
+		if points > winLimit then
+			print("Fish won!")
+			-- Send win RPC
+			-- End game
+			FishingGame.isPlaying = false
+			break
+		else
+			if points <= 0 then
+				print("Fish lost :(")
+				FishingGame.isPlaying = false
+			end
+		end
+
+		timeElapsed += TICK_SPEED
+		TestText.Text = points
 		task.wait(TICK_SPEED)
 	end
-end
 
-function FishingGame.EndGame() end
+	-- Clean up game for next use
+	FishingGame.greenDirection = nil
+	GreenArea.Position = UDim2.fromScale(0.5, GreenArea.Position.Y.Scale)
+
+	FishingGameUI.Visible = false
+
+	-- Retract players bobber
+end
 
 local isRightHeld = false
 function FishingGame._OnRightPressed(_actionName, inputState, _inputObject)
@@ -55,7 +98,7 @@ function FishingGame._OnRightPressed(_actionName, inputState, _inputObject)
 					PlayerIcon.Position =
 						UDim2.fromScale(PlayerIcon.Position.X.Scale + PLAYER_MOVE_SPEED, PlayerIcon.Position.Y.Scale)
 				end
-				print("moving right")
+				--print("moving right")
 				task.wait(TICK_SPEED)
 			end
 		end)
@@ -77,7 +120,7 @@ function FishingGame._OnLeftPressed(_actionName, inputState, _inputObject)
 					PlayerIcon.Position =
 						UDim2.fromScale(PlayerIcon.Position.X.Scale - PLAYER_MOVE_SPEED, PlayerIcon.Position.Y.Scale)
 				end
-				print("moving left")
+				--print("moving left")
 				task.wait(TICK_SPEED)
 			end
 		end)
@@ -97,11 +140,26 @@ function FishingGame._IsFishInGreen(): boolean
 
 	if playerLeftPos >= greenLeftPos and playerRightPos <= greenRightPos then
 		GreenArea.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+		return true
 	else
 		GreenArea.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 	end
 
 	return false
+end
+
+function FishingGame._HandleColor()
+	local greenLeftPos = GreenArea.AbsolutePosition.X
+	local greenRightPos = GreenArea.AbsolutePosition.X + GreenArea.AbsoluteSize.X
+
+	local playerLeftPos = PlayerIcon.AbsolutePosition.X
+	local playerRightPos = PlayerIcon.AbsolutePosition.X + PlayerIcon.AbsoluteSize.X
+
+	if playerLeftPos >= greenLeftPos and playerRightPos <= greenRightPos then
+		GreenArea.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+	else
+		GreenArea.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+	end
 end
 
 function FishingGame._GetGreenAreaSize(fish): UDim2
@@ -137,7 +195,6 @@ function FishingGame._GetNewGreenAreaPos(fish): UDim2
 	end
 
 	-- TODO: Bug with speed. Green area seems to speed up as time passes. Try to check the greenDirection variable
-	print(amount)
 	return newPos
 end
 
