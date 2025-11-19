@@ -7,13 +7,14 @@ local AnimationController = require(script.Parent.PlayerAnimationController)
 local ClientPlayer: Player = game.Players.LocalPlayer
 local ClientCharacter = ClientPlayer.Character or ClientPlayer.CharacterAdded:Wait()
 local ClientHumanoid: Humanoid = ClientCharacter:FindFirstChildOfClass("Humanoid")
-local Bobber: Part = ClientCharacter:WaitForChild("FishingRod").Bobber
+local Bobber: Part = ClientCharacter:WaitForChild("FishingRod"):WaitForChild("Bobber")
 
 local FishingController = {}
 
 FishingController.fishPosAnimTrack = nil
 
 FishingController.IsHoldingRod = false
+FishingController.IsCasted = false
 
 local initialized = false
 function FishingController.Init()
@@ -32,9 +33,14 @@ function FishingController._OnClickPressed(actionName, inputState, inputObject)
 		return
 	end
 
-	-- TODO: Play animation
-
-	Networker.FireServer(Networker.REMOTES.CAST_BOBBER, Bobber)
+	if FishingController.IsCasted then
+		Networker.FireServer(Networker.REMOTES.UNCAST_BOBBER, Bobber)
+		FishingController.IsCasted = false
+	else
+		-- TODO: Play animation
+		Networker.FireServer(Networker.REMOTES.CAST_BOBBER, Bobber, workspace.CurrentCamera.CFrame.LookVector)
+		FishingController.IsCasted = true
+	end
 end
 
 function FishingController._OnToggleRod(actionName, inputState, inputObject)

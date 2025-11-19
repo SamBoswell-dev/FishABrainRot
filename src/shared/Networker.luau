@@ -8,6 +8,7 @@ Networker.REMOTES = {
 	CHANGE_ROD_TRANSPARENCY = "ChangeRodTransparency",
 	ON_FISH_GAME = "OnFishGame",
 	CAST_BOBBER = "CastBobber",
+	UNCAST_BOBBER = "UncastBobber",
 }
 
 Networker.RPCFolder = nil
