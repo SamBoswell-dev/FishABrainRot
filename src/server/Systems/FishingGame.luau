@@ -4,6 +4,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Networker = require(ReplicatedStorage.Shared.Networker)
 local FishingGame = {}
 
+local CAST_SPEED: number = 1
+
 function FishingGame.InitBobber()
 	local detectors = CollectionService:GetTagged("BobberDetector")
 
@@ -46,5 +48,18 @@ function FishingGame.SpawnFish(player: Player)
 	-- Send data to client
 	Networker.FireClient(Networker.REMOTES.ON_FISH_GAME, player, fish)
 end
+
+Networker.OnServerEvent(Networker.REMOTES.CAST_BOBBER, function(plr, bobber)
+	bobber.Anchored = false
+	local weld = bobber:FindFirstChild("WeldConstraint")
+	weld.Enabled = false
+
+	local throwVector: Vector3 = plr.Character.HumanoidRootPart.CFrame.LookVector
+	local rotateVector = CFrame.fromAxisAngle(plr.Character.HumanoidRootPart.CFrame.RightVector, math.rad(45))
+	local finalVector = rotateVector:VectorToWorldSpace(throwVector)
+
+	bobber:ApplyImpulse(finalVector * CAST_SPEED)
+	bobber.CanCollide = true
+end)
 
 return FishingGame
