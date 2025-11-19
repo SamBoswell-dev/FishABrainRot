@@ -1,7 +1,11 @@
 -- POPULAR FONT: Fredoka One
 
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterPlayer = game:GetService("StarterPlayer")
 local TimerService = game:GetService("TimerService")
+local TweenService = game:GetService("TweenService")
+local Networker = require(ReplicatedStorage.Shared.Networker)
 local FishingController = require(StarterPlayer.StarterPlayerScripts.Client.Controllers.FishingController)
 local KeyBindManager = require(StarterPlayer.StarterPlayerScripts.Client.Modules.KeyBindManager)
 local FishingGameUI: Frame = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame
@@ -28,6 +32,7 @@ local POINT_TIME_MAX = 0.5 -- How often the points will get calculated (lower is
 function FishingGame.StartGame(fish)
 	-- Make unable to cast or toggle rod
 	KeyBindManager.UnBindRod()
+	KeyBindManager.UnBindCast()
 
 	FishingGameUI.Visible = true
 	FishingGame.isPlaying = true
@@ -93,8 +98,14 @@ function FishingGame.StartGame(fish)
 	KeyBindManager.UnbindFishingMiniGame()
 
 	-- Re-enable cast and toggle rod
-	FishingController.EnableToggleRod()
+	FishingController.EnableToggleRodAndClick()
 end
+
+Networker.OnClientEvent(Networker.REMOTES.TIGHTEN_LINE, function()
+	local beam = workspace.LocalParts.ClientBobber.Attachment.Beam
+	TweenService:Create(beam, TweenInfo.new(1), { CurveSize0 = 0 }):Play()
+	print("Tween played")
+end)
 
 local isRightHeld = false
 function FishingGame._OnRightPressed(_actionName, inputState, _inputObject)

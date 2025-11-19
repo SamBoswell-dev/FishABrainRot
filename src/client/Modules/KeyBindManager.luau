@@ -33,7 +33,6 @@ end
 
 function Manager.UnBindRod()
 	ContextActionService:UnbindAction(ACTIONS.TOGGLEROD)
-	ContextActionService:UnbindAction(ACTIONS.CLICKROD)
 end
 
 function Manager.BindCast(functionForClick: (string, Enum.UserInputState, InputObject) -> Enum.ContextActionResult?)

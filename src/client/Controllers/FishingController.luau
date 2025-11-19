@@ -81,8 +81,9 @@ function FishingController._OnToggleRod(actionName, inputState, inputObject)
 	end
 end
 
-function FishingController.EnableToggleRod()
+function FishingController.EnableToggleRodAndClick()
 	KeyBindManager.BindRod(FishingController._OnToggleRod)
+	KeyBindManager.BindCast(FishingController._OnClickPressed)
 end
 
 FishingController.Init()

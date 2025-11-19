@@ -9,6 +9,7 @@ Networker.REMOTES = {
 	ON_FISH_GAME = "OnFishGame",
 	CAST_BOBBER = "CastBobber",
 	UNCAST_BOBBER = "UncastBobber",
+	TIGHTEN_LINE = "TightenLine",
 }
 
 Networker.RPCFolder = nil

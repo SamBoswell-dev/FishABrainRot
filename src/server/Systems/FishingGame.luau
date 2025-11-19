@@ -1,6 +1,7 @@
 local CollectionService = game:GetService("CollectionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 local Networker = require(ReplicatedStorage.Shared.Networker)
 local FishingGame = {}
 
@@ -21,8 +22,11 @@ function FishingGame.OnBobber(otherPart)
 		print(`Touched by: {player.DisplayName}`)
 
 		-- Make bobber stop sinking
-
-		-- Make fishing line straight
+		local bodyForce = otherPart:FindFirstChild("BodyForce", false)
+		if bodyForce then
+			bodyForce:Destroy()
+			otherPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+		end
 
 		FishingGame.SpawnFish(player)
 	end
@@ -45,6 +49,15 @@ function FishingGame.SpawnFish(player: Player)
 	-- Randomly select wait time and wait
 	local waitTime: number = math.random(fish.minWaitTime, fish.maxWaitTime)
 	task.wait(waitTime)
+
+	-- Make fishing line straight
+	local char = player.Character
+	local rod = char.FishingRod
+	local bobber = rod.Bobber
+	local beam = bobber.Beam
+	TweenService:Create(beam, TweenInfo.new(1), { CurveSize0 = 0 }):Play()
+	-- Update client beam
+	Networker.FireClient(Networker.REMOTES.TIGHTEN_LINE, player)
 
 	-- Send data to client
 	Networker.FireClient(Networker.REMOTES.ON_FISH_GAME, player, fish)
