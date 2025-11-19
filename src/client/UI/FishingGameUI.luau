@@ -1,5 +1,8 @@
+-- POPULAR FONT: Fredoka One
+
 local StarterPlayer = game:GetService("StarterPlayer")
 local TimerService = game:GetService("TimerService")
+local FishingController = require(StarterPlayer.StarterPlayerScripts.Client.Controllers.FishingController)
 local KeyBindManager = require(StarterPlayer.StarterPlayerScripts.Client.Modules.KeyBindManager)
 local FishingGameUI: Frame = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame
 local GreenArea: ImageLabel = game.Players.LocalPlayer.PlayerGui.PlayerUI.FishingGame.GreenArea
@@ -23,6 +26,9 @@ local PLAYER_MOVE_SPEED = 0.008
 local POINT_TIME_MAX = 0.5 -- How often the points will get calculated (lower is faster)
 
 function FishingGame.StartGame(fish)
+	-- Make unable to cast or toggle rod
+	KeyBindManager.UnBindRod()
+
 	FishingGameUI.Visible = true
 	FishingGame.isPlaying = true
 
@@ -85,6 +91,9 @@ function FishingGame.StartGame(fish)
 
 	-- Release key binds
 	KeyBindManager.UnbindFishingMiniGame()
+
+	-- Re-enable cast and toggle rod
+	FishingController.EnableToggleRod()
 end
 
 local isRightHeld = false

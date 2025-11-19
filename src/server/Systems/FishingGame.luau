@@ -16,6 +16,11 @@ function FishingGame.OnBobber(otherPart)
 	if otherPart:HasTag("Bobber") then
 		local player: Player = Players:GetPlayerFromCharacter(otherPart.Parent.Parent)
 		print(`Touched by: {player.DisplayName}`)
+
+		-- Make bobber stop sinking
+
+		-- Make fishing line straight
+
 		FishingGame.SpawnFish(player)
 	end
 end

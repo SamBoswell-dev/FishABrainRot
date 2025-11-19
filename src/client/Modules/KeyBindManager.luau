@@ -6,6 +6,7 @@ local ACTIONS = {
 	PRESSLEFT = "PRESS_LEFT",
 	PRESSFORWARD = "PRESS_FORWARD",
 	PRESSBACKWARD = "PRESS_BACKWARD",
+	TOGGLEROD = "TOGGLE_ROD",
 }
 
 function Manager.BindFishingMiniGame(
@@ -23,6 +24,14 @@ function Manager.UnbindFishingMiniGame()
 	ContextActionService:UnbindAction(ACTIONS.PRESSLEFT)
 	ContextActionService:UnbindAction(ACTIONS.PRESSFORWARD)
 	ContextActionService:UnbindAction(ACTIONS.PRESSBACKWARD)
+end
+
+function Manager.BindRod(functionToBind: (string, Enum.UserInputState, InputObject) -> Enum.ContextActionResult?)
+	ContextActionService:BindAction(ACTIONS.TOGGLEROD, functionToBind, false, Enum.KeyCode.F)
+end
+
+function Manager.UnBindRod()
+	ContextActionService:UnbindAction(ACTIONS.TOGGLEROD)
 end
 
 return Manager

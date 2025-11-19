@@ -1,6 +1,8 @@
 local Networker = require(game:GetService("ReplicatedStorage").Shared.Networker)
 local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
+local KeyBindManager = require(StarterPlayer.StarterPlayerScripts.Client.Modules.KeyBindManager)
 local AnimationController = require(script.Parent.PlayerAnimationController)
 local ClientPlayer: Player = game.Players.LocalPlayer
 local ClientCharacter = ClientPlayer.Character or ClientPlayer.CharacterAdded:Wait()
@@ -8,10 +10,6 @@ local ClientHumanoid: Humanoid = ClientCharacter:FindFirstChildOfClass("Humanoid
 local FishingController = {}
 
 FishingController.fishPosAnimTrack = nil
-
-local ACTIONNAMES = {
-	TOGGLEROD = "TOGGLE_ROD",
-}
 
 FishingController.IsHoldingRod = false
 
@@ -22,7 +20,7 @@ function FishingController.Init()
 	end
 	initialized = true
 
-	FishingController._BindToggleRod()
+	KeyBindManager.BindRod(FishingController._OnToggleRod)
 end
 
 -- Action Events ----------------------
@@ -63,8 +61,8 @@ function FishingController._OnToggleRod(actionName, inputState, inputObject)
 	end
 end
 
-function FishingController._BindToggleRod()
-	ContextActionService:BindAction(ACTIONNAMES.TOGGLEROD, FishingController._OnToggleRod, false, Enum.KeyCode.F)
+function FishingController.EnableToggleRod()
+	KeyBindManager.BindRod(FishingController._OnToggleRod)
 end
 
 FishingController.Init()
