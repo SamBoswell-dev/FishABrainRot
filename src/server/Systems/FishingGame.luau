@@ -39,8 +39,8 @@ function FishingGame.SpawnFish(player: Player)
 		fishName = "SnootieFish",
 		minWaitTime = 2,
 		maxWaitTime = 5,
-		pointsToWin = 10,
-		initalPointValue = 5,
+		pointsToWin = 1000,
+		initalPointValue = 500,
 		pointDecreaseRate = 1, -- Per second
 		greenAreaWidth = 50, -- 1 - 100
 		greenAreaSpeed = 1, -- 1 - 10

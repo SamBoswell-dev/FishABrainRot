@@ -30,12 +30,17 @@ local PLAYER_MOVE_SPEED = 0.008
 local POINT_TIME_MAX = 0.5 -- How often the points will get calculated (lower is faster)
 
 function FishingGame.StartGame(fish)
+	if FishingGame.isPlaying then
+		return
+	end
+	print(`Starting fish-mini game with: {fish.fishName}`)
+	FishingGame.isPlaying = true
+
 	-- Make unable to cast or toggle rod
 	KeyBindManager.UnBindRod()
 	KeyBindManager.UnBindCast()
 
 	FishingGameUI.Visible = true
-	FishingGame.isPlaying = true
 
 	-- Make the Green area match with the fish's value
 	GreenArea.Size = FishingGame._GetGreenAreaSize(fish) -- max .33 min .12
@@ -49,8 +54,6 @@ function FishingGame.StartGame(fish)
 	local timeElapsed = 0
 
 	while FishingGame.isPlaying do
-		local timeStart = os.time()
-
 		-- Move the green area
 		GreenArea.Position = FishingGame._GetNewGreenAreaPos(fish)
 		FishingGame._HandleColor()
@@ -73,7 +76,6 @@ function FishingGame.StartGame(fish)
 			-- Send win RPC
 			-- End game
 			FishingGame.isPlaying = false
-			break
 		else
 			if points <= 0 then
 				print("Fish lost :(")
@@ -104,7 +106,6 @@ end
 Networker.OnClientEvent(Networker.REMOTES.TIGHTEN_LINE, function()
 	local beam = workspace.LocalParts.ClientBobber.Attachment.Beam
 	TweenService:Create(beam, TweenInfo.new(1), { CurveSize0 = 0 }):Play()
-	print("Tween played")
 end)
 
 local isRightHeld = false
@@ -214,7 +215,6 @@ function FishingGame._GetNewGreenAreaPos(fish): UDim2
 	local newPos =
 		UDim2.fromScale(GreenArea.Position.X.Scale + amount * FishingGame.greenDirection, GreenArea.Position.Y.Scale)
 
-	-- TODO: Bug with speed. Green area seems to speed up as time passes. Try to check the greenDirection variable
 	return newPos
 end
 

@@ -5,7 +5,6 @@ local Networker = require(ReplicatedStorage.Shared.Networker)
 local UIController = {}
 
 Networker.OnClientEvent(Networker.REMOTES.ON_FISH_GAME, function(fish)
-	print(`Play fish-mini game with: {fish.fishName}`)
 	FishingGameUI.StartGame(fish)
 end)
 
